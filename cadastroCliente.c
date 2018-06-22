@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <string.h> //Biblioteca para usar a funÁao strcm
+#include <string.h> //Biblioteca para usar a fun√ßao strcm
 #include <ctype.h>
 #include <locale.h>
 #include <windows.h>
@@ -15,13 +15,14 @@ struct Pessoa{
     char senha[9];
 };
 
-// prototipaÁ„o
+// prototipa√ß√£o
 void menu();
 FILE *abrirArquivo(char modo, char *caminho);
 void fecharArquivo(FILE *arquivo);
 void inserirContato(struct Pessoa umaPessoa);
 struct Pessoa lerLogin();
 void validarCadastro(struct Pessoa umaPessoa);
+void menutempo();
 
 int main()
 {
@@ -33,8 +34,8 @@ int main()
 
 
         menu();
-        printf("\t|--------------Digite uma opc„o-----------------|\n");
-        printf("\t  OpÁ„o desejada: ");
+        printf("\t|--------------Digite uma opc√£o-----------------|\n");
+        printf("\t  Op√ß√£o desejada: ");
         scanf("%d", &op);
 
         switch (op){
@@ -44,7 +45,7 @@ int main()
             printf("\n\n\tDigite seu login: ");
             getchar();
             scanf("%[^\n]s", umaPessoa.login);
-            printf("\tDigite uma senha de atÈ 8 digitos: ");
+            printf("\tDigite uma senha de at√© 8 digitos: ");
             getchar();
             scanf("%[^\n]s", umaPessoa.senha);
             printf("\tDigite sua idade: ");
@@ -54,7 +55,7 @@ int main()
             scanf("%[^\n]s", umaPessoa.email);
 
             if(umaPessoa.idade<18){
-                printf("\n\n\tATEN«√O: Sistema n„o disponÌvel para menores de 18 anos!\n\n\n");
+                printf("\n\n\tATEN√á√ÉO: Sistema n√£o dispon√≠vel para menores de 18 anos!\n\n\n");
             }else{
                 inserirContato(umaPessoa);
                 puts("\n\n\t*************CASDASTRO REALIZADO COM SUCESSO**************\n\n");
@@ -84,7 +85,7 @@ void menu(){
 
     puts("\n");
 
-    printf("\t-------------BEM VINDO ¿ JLINVEST LTDA ----------\n");
+    printf("\t-------------BEM VINDO √Ä JLINVEST LTDA ----------\n");
     printf("\t|                                               |\n");
     printf("\t| Digite 1 para cadastrar                       |\n");
     printf("\t| Digite 2 para logar                           |\n");
@@ -117,10 +118,10 @@ FILE *abrirArquivo(char modo, char *caminho){
 
  void validarCadastro(struct Pessoa umaPessoa){
 
-    FILE *fp = fopen("cadastro.txt", "r"); //"r" para ler o que tem no arquivo
+    FILE *fp = fopen("cadastro.txt", "rt"); //"r" para ler o que tem no arquivo
 
     if (fp == NULL){
-        printf("\nO arquivo n„o foi aberto!");
+        printf("\nO arquivo n√£o foi aberto!");
         exit(0);
     }
 
@@ -140,27 +141,29 @@ FILE *abrirArquivo(char modo, char *caminho){
     //printf("\nLogin: %s", login); //teste p ver o que estava imprimindo
     //printf("\nSenha: %s", senha); //teste p ver o que estava imprimindo
 
-    while(!feof(fp) || str == '\n') {
-
+    while(!feof(fp)) {
         fscanf(fp, "%[^;]s", pess.login);
         fscanf(fp, ";%[^;]s", pess.senha);
         fscanf(fp, ";%d", &pess.idade);
-        fscanf(fp, ";%[^;]s", pess.email);
-
+        fscanf(fp, ";%s ", pess.email);
         if((strcmp(pess.login, login) == 0) && (strcmp(pess.senha, senha) == 0) ) {
             logou = 1;
         }
-
-        fgets(str, sizeof(struct Pessoa), fp);
-
     }//Fim while
 
     fclose(fp);
 
     if (logou) {
-        printf("\n\tLOGADO!\n");
+        system("cls");
+        printf("\n\tBEM VINDO! USU√ÅRIO LOGADO!\n");
+        bemvindo();
+
     } else {
-        printf("\n\tNAO LOGADO!\n");
+        system("cls");
+        printf("\n\tNAO LOGADO! TENTE NOVAMENTE!\n");
+        validarCadastro(umaPessoa);
+        Sleep(2000);
+
     }
 
 }
@@ -189,7 +192,7 @@ void fecharArquivo(FILE *arquivo){
 void inserirContato(struct Pessoa umaPessoa){
     FILE *arquivo;
     arquivo = abrirArquivo('a', nomeArquivo);
-    fprintf(arquivo, "%s;%s;%d;%s;\n", umaPessoa.login, umaPessoa.senha, umaPessoa.idade, umaPessoa.email);
+    fprintf(arquivo, "%s;%s;%d;%s\n", umaPessoa.login, umaPessoa.senha, umaPessoa.idade, umaPessoa.email);
     fecharArquivo(arquivo);
 }
 
